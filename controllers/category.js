@@ -37,7 +37,7 @@ exports.updateCategory = async(req, res) => {
     };
 };
 
-exports.getAllCategories = async(req, res) => {
+exports.getCategories = async(req, res) => {
     try{
         const categories = await Category.find();
         return res.status(200).json({

@@ -38,7 +38,7 @@ exports.updateOrder = async(req, res) => {
     }
 }
 
-exports.getAllOrders = (req, res) => {
+exports.getAllOrders = async(req, res) => {
     try{
         const orders = await Order.find();
         return res.status(200).json({

@@ -6,7 +6,6 @@ const {
     getUserOrders
 } = require("../controllers/order");
 const { isSignedIn, isAuthorized } = require("../middleware/auth");
-const Order = require("../models/Order");
 
 
 const router = require("express").Router();
