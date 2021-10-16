@@ -18,7 +18,7 @@ const router = require("express").Router();
  * @param {Object} req.body - cartItems
  * @description Add Items to Users Cart
  */
-router.post("/", isSignedIn, isAuthorized, addToCart);
+router.post("/:userId", isSignedIn, isAuthorized, addToCart);
 
 
 /**
@@ -27,7 +27,7 @@ router.post("/", isSignedIn, isAuthorized, addToCart);
  * @param {Object} req.body - cartItems
  * @description Update Items in Users Cart
  */
-router.put("/:cartId", isSignedIn, isAuthorized, updateCart);
+router.put("/:cartId/:userId", isSignedIn, isAuthorized, updateCart);
 
 
 /**
@@ -36,7 +36,7 @@ router.put("/:cartId", isSignedIn, isAuthorized, updateCart);
  * @param 
  * @description Delete Cart
  */
-router.delete("/:cartId", isSignedIn, isAuthorized, deleteCart);
+router.delete("/:cartId/:userId", isSignedIn, isAuthorized, deleteCart);
 
 
 
@@ -55,6 +55,6 @@ router.get("/:userId", isSignedIn, isAuthorized, getCart);
  * @param 
  * @description Get All Cart Items
  */
-router.get("/", isSignedIn, isAuthorized, isAdmin, getAllCart);
+router.get("/:userId", isSignedIn, isAuthorized, isAdmin, getAllCart);
 
 module.exports = router;
