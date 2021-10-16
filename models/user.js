@@ -16,6 +16,10 @@ const UserSchema = new mongoose.Schema(
             type: Boolean,
             default: false,
         },
+        avatar:{
+            type:String,
+            default: "https://lh3.googleusercontent.com/a-/AOh14Ggp0XD8GwkhtoNUO9uWgAfAip60bJUgLPnadGylJg=s96-c"
+        },
         isAdmin: {
             type: Boolean,
             default: false,
