@@ -2,20 +2,24 @@ const {
     addProduct, 
     updateProduct, 
     getProduct, 
-    getAllProduct 
+    getAllProduct,
+    getAllProductAdmin
 } = require("../controllers/product");
 const { 
     isSignedIn, 
-    isAuthorized 
+    isAuthorized,
+    isAdmin 
 } = require("../middleware/auth");
 const router = require("express").Router();
 
-router.post("/:userId", isSignedIn, isAuthorized, addProduct);
+router.post("/:userId", isSignedIn, isAuthorized, isAdmin, addProduct);
 
-router.put("/:productId/:userId", isSignedIn, isAuthorized, updateProduct);
+router.put("/:productId/:userId", isSignedIn, isAuthorized, isAdmin, updateProduct);
 
-router.get("/productId/:userId", isSignedIn, isAuthorized, getProduct);
+router.get("/:userId", getProduct);
 
-router.get("/:userId", isSignedIn, isAuthorized, getAllProduct);
+router.get("/", getAllProduct);
+
+router.get("/:userId", isSignedIn, isAuthorized, isAdmin, getAllProductAdmin);
 
 module.exports = router;

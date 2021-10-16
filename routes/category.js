@@ -13,6 +13,6 @@ router.put('/:categoryId/:userId', isSignedIn, isAuthorized, isAdmin, updateCate
 
 router.delete('/:categoryId/:userId', isSignedIn, isAuthorized, isAdmin, deleteCategory);
 
-router.get('/:userId', isSignedIn, isAuthorized, getCategories);
+router.get('/', getCategories);
 
 module.exports = router;
