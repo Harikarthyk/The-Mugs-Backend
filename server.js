@@ -27,6 +27,6 @@ app.use('/api/products', productsRoute);
 app.use('/api/categories', categoriesRoute);
 app.use('/api/orders', ordersRoute);
 
-const PORT = process.env.PORT || 5050;
+const PORT = process.env.PORT || 5051;
 
 app.listen(PORT, () => console.log(`Server is up and running at ${PORT}`));

@@ -3,7 +3,8 @@ const {
     createCategory,
     updateCategory, 
     deleteCategory,
-    getCategories
+    getCategories,
+    getCategoryDetail
 } = require('../controllers/category');
 const { isSignedIn, isAuthorized, isAdmin } = require("../middleware/auth");
 
@@ -14,5 +15,7 @@ router.put('/:categoryId/:userId', isSignedIn, isAuthorized, isAdmin, updateCate
 router.delete('/:categoryId/:userId', isSignedIn, isAuthorized, isAdmin, deleteCategory);
 
 router.get('/', getCategories);
+
+router.get('/:categoryId', getCategoryDetail);
 
 module.exports = router;
