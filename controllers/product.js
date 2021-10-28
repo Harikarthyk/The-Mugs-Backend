@@ -44,7 +44,7 @@ exports.getProduct = async(req, res) => {
             success: true,
             product: product
         });
-    } catch (err) {
+    } catch (error) {
         return res.status(500).json({
             success: false,
             error: error
