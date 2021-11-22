@@ -6,7 +6,10 @@ const {
     adminGetUserInfo,
     adminUpdateUserInfo
 } = require("../controllers/user");
-const { isSignedIn, customRoles } = require("../middleware/user");
+const { 
+    isSignedIn, 
+    customRoles 
+} = require("../middleware/user");
 const router = express.Router();
 
 router.post("/google", googleLogin);
