@@ -11,13 +11,13 @@ const {
 } = require("../middleware/auth");
 const router = require("express").Router();
 
+// admin routes
 router.post("/admin/", isSignedIn, customRoles("admin"), addProduct);
 router.put("/admin/:productId/", isSignedIn, customRoles("admin"), updateProduct);
+router.get("/:userId", isSignedIn, isAuthorized, isAdmin, getAllProductAdmin);
+
 
 router.get("/:productId/", getProduct); 
 router.get("/", getAllProduct);
-
-router.get("/:userId", isSignedIn, isAuthorized, isAdmin, getAllProductAdmin);
-
 
 module.exports = router;
