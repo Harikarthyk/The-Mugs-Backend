@@ -17,10 +17,10 @@ const ProductSchema = new mongoose.Schema(
             type: String,
             required: [true, "Please provide the thumbnail Image."]
         },
-        categories: [{
+        categories: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Category"
-        }],
+        },
         sellingPrice: {
             type: Number,
             required: true

@@ -1,6 +1,7 @@
 const Product = require("../models/Product");
+const WhereClause = require("../utils/whereClause");
 
-exports.addProduct = async(req, res) => {
+exports.addProduct = async (req, res) => {
     try {
         const newProduct = new Product(req.body);
         const savedProduct = await newProduct.save();
@@ -16,7 +17,7 @@ exports.addProduct = async(req, res) => {
     };
 };
 
-exports.updateProduct = async(req, res) => {
+exports.updateProduct = async (req, res) => {
     try {
         const { productId } = req.params;
         const updatedProduct = await Product.findByIdAndUpdate(
@@ -36,7 +37,7 @@ exports.updateProduct = async(req, res) => {
     };
 };
 
-exports.getProduct = async(req, res) => {
+exports.getProduct = async (req, res) => {
     try {
         const { productId } = req.params;
         const product = await Product.findById(productId);
@@ -52,10 +53,10 @@ exports.getProduct = async(req, res) => {
     };
 };
 
-exports.getAllProductAdmin = async() => {
-    try{
-        
-    }catch(error){
+exports.getAllProductAdmin = async (req ,res) => {
+    try {
+
+    } catch (error) {
         return res.status(400).json({
             error: error,
             success: false
@@ -63,126 +64,35 @@ exports.getAllProductAdmin = async() => {
     };
 }
 
-exports.getAllProduct = async(req, res) => {
-    try{
-        const isAdmin = false;
-        // const { isAdmin } = req.user;
-        const { sort, category, query } = req.query;
-        let products = [];
-        if(sort && category && query){
-            if(isAdmin === true){
-                products = await Product.find({ 
-                    name: { $regex: query, $options: "mi" },
-                    categories: {
-                        $in: [category],
-                    },
-                }).sort({ createdAt: sort });
-            }
-            else {
-                products = await await Product.find({ 
-                    name: { $regex: query, $options: "mi" },
-                    categories: {
-                        $in: [category],
-                    },
-                    isActive: true
-                }).sort({ createdAt: sort });
-            };
-        }else if(sort && !category && query){
-            if(isAdmin === true){
-                products = await Product.find({ 
-                    name: { $regex: query, $options: "mi" },
-                }).sort({ createdAt: sort });
-            }
-            else {
-                products = await await Product.find({ 
-                    name: { $regex: query, $options: "mi" },
-                    isActive: true
-                }).sort({ createdAt: sort });
-            };
-        }else if(sort && category && !query){
-            if(isAdmin === true){
-                products = await Product.find({ 
-                    categories: {
-                        $in: [category],
-                    },
-                }).sort({ createdAt: sort });
-            }
-            else {
-                products = await await Product.find({ 
-                    categories: {
-                        $in: [category],
-                    },
-                    isActive: true
-                }).sort({ createdAt: sort });
-            };
-        }else if(!sort && category && query){
-            if(isAdmin === true){
-                products = await Product.find({ 
-                    name: { $regex: query, $options: "mi" },
-                    categories: {
-                        $in: [category],
-                    },
-                });
-            }
-            else {
-                products = await await Product.find({ 
-                    name: { $regex: query, $options: "mi" },
-                    categories: {
-                        $in: [category],
-                    },
-                    isActive: true
-                });
-            };
-        }else if(sort && !category && !query){
-            if(isAdmin === true){
-                products = await Product.find().sort({ createdAt: sort });
-            }
-            else {
-                products = await await Product.find({ 
-                    isActive: true
-                }).sort({ createdAt: sort });
-            };
-        }else if(!sort && !category && query){
-            if(isAdmin === true){
-                products = await Product.find({ 
-                    name: { $regex: query, $options: "mi" },
-                });
-            }
-            else {
-                products = await await Product.find({ 
-                    name: { $regex: query, $options: "mi" },
-                    isActive: true
-                });
-            };
-        }else if(!sort && category && !query){
-            if(isAdmin === true){
-                products = await Product.find({ 
-                    categories: {
-                        $in: [category],
-                    },
-                });
-            }
-            else {
-                products = await await Product.find({ 
-                    categories: {
-                        $in: [category],
-                    },
-                    isActive: true
-                });
-            };
-        }else{
-            if(isAdmin === true){
-                products = await Product.find({});
-            }
-            else {
-                products = await Product.find({ isActive: true });
-            };
-        }
+exports.getAllProduct = async (req, res) => {
+    try {
+
+        const productsObj = new WhereClause(Product, req.query, req.user.role).search().filter();
+
+
+        const availableProducts = await productsObj.base;
+
+        const availableProductCount = availableProducts.length;
+
+        const { limit } = req.query;
+
+        const RESULT_PER_PAGE = Number(limit) || 2;
+
+        productsObj.pager(RESULT_PER_PAGE);
+
+        const products = await productsObj.base.clone();
+
+        const totalProductsCount = products.length;
+
         return res.status(200).json({
             success: true,
-            products: products,
-        })
-    }catch(error){
+            products,
+            availableProductCount,
+            totalProductsCount
+        });
+
+    } catch (error) {
+        console.log(error)
         return res.status(400).json({
             error: error,
             success: false
