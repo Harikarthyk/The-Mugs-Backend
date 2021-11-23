@@ -92,9 +92,8 @@ exports.getAllProduct = async (req, res) => {
         });
 
     } catch (error) {
-        console.log(error)
         return res.status(400).json({
-            error: error,
+            error: error.message,
             success: false
         });
     };
