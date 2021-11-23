@@ -5,7 +5,7 @@ const CartSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId, 
             ref: "User",
         },
-        products: [
+        items: [
             {
                 product: {
                     type: mongoose.Schema.Types.ObjectId, 
@@ -24,6 +24,10 @@ const CartSchema = new mongoose.Schema({
         coupon:{
             type: mongoose.SchemaTypes.ObjectId,
             ref: "Coupon"
+        },
+        isActive:{
+            type: Boolean,
+            default: true
         }
     },
     { timestamps: true }
