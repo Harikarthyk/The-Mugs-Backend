@@ -75,3 +75,33 @@ exports.updateCart = async(req, res) => {
         });
     }
 }
+
+exports.adminCartInfo = async(req, res) => {
+    try{
+
+        const { userId } = req.params;
+
+        let cart = await Cart.findOne({ user: userId, isActive: true });
+
+        if(cart === null){
+            cart = await Cart.create({
+                user: userId
+            });
+            return res.status(201).json({
+                success: false,
+                cart
+            });
+        }
+
+        return res.status(200).json({
+            success: false,
+            cart
+        });
+
+    }catch(error){
+        return res.status(400).json({
+            success: false,
+            error: error?.message || error
+        });
+    }
+}

@@ -14,7 +14,6 @@ router.put("/", isSignedIn,  updateCart);
 
 // admin routes 
 router.post("/admin/:userId/",isSignedIn, customRoles("admin"), adminCartInfo);     
-router.delete("/admin/:categoryId/:userId/", isSignedIn, customRoles("admin"), deleteCategory);
 
 
 module.exports = router;
