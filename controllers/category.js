@@ -87,7 +87,8 @@ exports.getCategoryDetail = async(req, res) => {
     try{
         const { categoryId } = req.params;
         const category = await Category.findOne({_id: categoryId});
-        const products = await  Product.find({$in: {categories: categoryId}} );
+        // const products = await  Product.find({$in: {categories: categoryId}} );
+        const products = await  Product.find({categories: categoryId});
         return res.status(200).json({
             success: true,
             category: category,
