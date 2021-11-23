@@ -17,10 +17,14 @@ const CartSchema = new mongoose.Schema({
                 },
             },
         ],
-        total:{
+        subtotal:{
             type:Number,
             required:true
         },
+        coupon:{
+            type: mongoose.SchemaTypes.ObjectId,
+            ref: "Coupon"
+        }
     },
     { timestamps: true }
 );
