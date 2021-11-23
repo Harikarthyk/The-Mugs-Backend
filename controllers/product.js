@@ -53,17 +53,6 @@ exports.getProduct = async (req, res) => {
     };
 };
 
-exports.getAllProductAdmin = async (req ,res) => {
-    try {
-
-    } catch (error) {
-        return res.status(400).json({
-            error: error,
-            success: false
-        });
-    };
-}
-
 exports.getAllProduct = async (req, res) => {
     try {
 
