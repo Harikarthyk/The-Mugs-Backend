@@ -18,8 +18,8 @@ const userSchema = new mongoose.Schema(
         },
         password: { 
             type: String,
-            minlength: [6, "Password should be at least 6 Characters."],
-            select: false
+            select: false,
+            required: [false]
         },
         googleId: {
             type: String,
@@ -53,7 +53,7 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.pre("save", async function(next){
-    if(this.isModified(password) === false){
+    if(this.isModified(this.password) === true){
         return next();
     }
     this.password = await bcrypt.hash(this.password, 10);

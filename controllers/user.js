@@ -1,17 +1,20 @@
 const { cookieToken } = require("../utils/cookieToken");
 const User = require("../models/user");
+const jwt = require("jsonwebtoken");
 
 exports.googleLogin = async(req, res) => {
     try{
         const { googleId } = req.body;
-        const users = await User.findOne({googleId : googleId});
+        const users = await User.find({googleId : googleId});
+        const { JWT_SECRET } = process.env;
+           
         if(users.length === 0){
             const user = await new User(req.body).save();
             const accessToken = jwt.sign({
                     id: user._id,
                     isAdmin: user.isAdmin,
                 },
-                process.env.JWT_SEC,{
+                JWT_SECRET,{
                     expiresIn:"3d"
                 }
             );
@@ -28,7 +31,7 @@ exports.googleLogin = async(req, res) => {
             id: user._id,
                 isAdmin: user.isAdmin,
             },
-            process.env.JWT_SEC,{
+            JWT_SECRET,{
                 expiresIn:"3d"
             }
         );
@@ -40,10 +43,10 @@ exports.googleLogin = async(req, res) => {
         }, res);
 
     }catch(error){
-        console.log(error);
+        console.log(error)
         return res.status(400).json({
             success: false,
-            error: error,
+            error: error?.message || error,
         });
     }
 }
