@@ -1,5 +1,6 @@
 const Category = require("../models/category");
 const Product = require("../models/Product");
+const WhereClause = require("../utils/whereClause");
 
 exports.createCategory = async(req, res) => {
     try{
@@ -40,11 +41,24 @@ exports.updateCategory = async(req, res) => {
 
 exports.getCategories = async(req, res) => {
     try{
-        const categories = await Category.find();
+        const categoriesObj = new WhereClause(Category, req.query).search().filter();
+
+        const { limit } = req.query;
+
+        const RESULT_PER_PAGE = Number(limit) || 25;
+
+        categoriesObj.pager(RESULT_PER_PAGE);
+
+        const categories = await categoriesObj.base;
+
+        const totalCategoriesCount = categories.length;
+
         return res.status(200).json({
             success: true,
             categories: categories,
+            totalCategoriesCount
         });
+        
     }catch(error){
         return res.status(400).json({
             success: false,
