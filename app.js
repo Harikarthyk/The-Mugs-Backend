@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const fileUploader = require("express-fileupload");
 require("./config/database");
 const cookieParser = require("cookie-parser");
 const userRoutes = require("./routes/user");
@@ -12,6 +13,7 @@ const reviewRoutes = require("./routes/review");
 const app = express();
 
 app.use(express.json());
+app.use(fileUploader());
 app.use(cookieParser());
 
 app.use("/api/v1/user", userRoutes);
