@@ -19,7 +19,7 @@ const CartSchema = new mongoose.Schema({
         ],
         subtotal:{
             type:Number,
-            required:true
+            default: 0
         },
         coupon:{
             type: mongoose.SchemaTypes.ObjectId,

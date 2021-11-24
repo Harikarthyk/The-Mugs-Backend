@@ -1,16 +1,16 @@
 const Cart = require("../models/cart");
 
-exports.getCart = async(req, res) => {
+exports.getCartInfo = async(req, res) => {
     try{
         let cart = await Cart.findOne({ user: req.user._id, isActive: true });
 
         if(cart === null){
             cart = await Cart.create({
-                user: req.user._id
+                user: req.user._id,
             });
             return res.status(201).json({
                 success: false,
-                cart
+                cart,
             });
         }
 
@@ -30,37 +30,56 @@ exports.getCart = async(req, res) => {
 exports.updateCart = async(req, res) => {
     try{
 
-        const { item, subtotal } = req.body;
+        const { items, subtotal } = req.body;
 
-        if(!item || !subtotal){
+        if(!items || !subtotal){
             return res.status(400).json({
                 success: false,
                 error: "Cart items missing."
             });
         }
 
-        
         let cart = await Cart.findOneAndUpdate(
-            { user: req.user._id, isActive: true }, 
-            { 
-                $push: { items: item }, 
-                $set: { $inc: { subtotal: total } } 
-            }, 
-            { new: true}
+            { user: req.user._id, isActive: true },
+            {
+                $set: req.body
+            },
+            { new: true }
         );
 
-        if(cart === null){
-            cart = await Cart.create({
-                user: req.user._id,
-                items: [item],
-                total
-            });
 
-            return res.status(201).json({
-                success: true,
-                cart: cart
-            })
-        }
+        // let cart = await Cart.findOneAndUpdate(
+        //     { user: req.user._id, isActive: true, "items.product": item.product }, 
+        //     { 
+        //         $push: { items: item }, 
+        //         $inc: { subtotal: subtotal } 
+        //     }, 
+        //     { new: true}
+        // );
+
+        // if(cart === null){
+        //     cart = await Cart.findOneAndUpdate(
+        //         { user: req.user._id, isActive: true }, 
+        //         { 
+        //             $push: { items: item }, 
+        //             $inc: { subtotal: subtotal } 
+        //         }, 
+        //         { new: true}
+        //     );
+
+        //     if(cart === null){
+        //         cart = await Cart.create({
+        //             user: req.user._id,
+        //             items: [item],
+        //             subtotal
+        //         });
+        //     }
+            
+        //     return res.status(201).json({
+        //         success: true,
+        //         cart: cart
+        //     })
+        // }
         
 
         return res.status(200).json({
