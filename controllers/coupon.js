@@ -42,7 +42,7 @@ exports.getCoupon = async(req, res) => {
 exports.getAllCoupon = async(req, res) => {
     try{
 
-        const couponObj = new WhereClause(Coupon, req.query, req.user.role);
+        const couponObj = new WhereClause(Coupon, req.query, req.user.role).search().filter();
 
         const coupons = await couponObj.base;
 

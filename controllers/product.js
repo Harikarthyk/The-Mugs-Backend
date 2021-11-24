@@ -87,4 +87,3 @@ exports.getAllProduct = async (req, res) => {
         });
     };
 };
-
