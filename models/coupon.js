@@ -16,7 +16,14 @@ const couponSchema = new mongoose.Schema({
             required: [true, "Please enter the discount value."]
             // example: "10% 20"
         },
-
+        isActive:{
+            type: Boolean,
+            default: true
+        },
+        isDeleted:{
+            type: Boolean,
+            default: false
+        }
     },
     { timestamps: true }
 );
