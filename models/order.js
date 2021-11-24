@@ -39,7 +39,114 @@ const OrderSchema = new mongoose.Schema(
                 default: 0
             }
         }],
+        phone:{
+            type: String,
+            required:[true, "Please enter the phone number."]
+        },
         notes:[],
+        shippingAddress:{
+            line1: {
+                type: String,
+                required:[true, "Please enter the address line1 ."],
+                trim: true
+            },
+            line2: {
+                type: String,
+                trim: true,
+            },
+            pinCode:{
+                type: String,
+                trim: true,
+                maxlength: [6, "Please enter valid pin code ."],
+                minlength: [4, "Please enter valid pin code ."],
+            },
+            city:{
+                type: String,
+                trim: true,
+                maxlength: [40, "Please enter valid city ."],
+                minlength: [2, "Please enter valid city ."],
+            },
+            state:{
+                type: String,
+                trim: true,
+                maxlength: [40, "Please enter valid state ."],
+                minlength: [2, "Please enter valid state ."],
+            },
+            country:{
+                type: String,
+                default: "India",
+            }
+        },
+        billingAddress: {
+            line1: {
+                type: String,
+                required:[true, "Please enter the address line1 ."],
+                trim: true
+            },
+            line2: {
+                type: String,
+                trim: true,
+            },
+            pinCode:{
+                type: String,
+                trim: true,
+                maxlength: [6, "Please enter valid pin code ."],
+                minlength: [4, "Please enter valid pin code ."],
+            },
+            city:{
+                type: String,
+                trim: true,
+                maxlength: [40, "Please enter valid city ."],
+                minlength: [2, "Please enter valid city ."],
+            },
+            state:{
+                type: String,
+                trim: true,
+                maxlength: [40, "Please enter valid state ."],
+                minlength: [2, "Please enter valid state ."],
+            },
+            country:{
+                type: String,
+                default: "India",
+            }
+        },
+        status: {
+            type: String,
+            default: "PROCESSING",
+            enum: [
+                "NEW",
+                "PROCESSING",
+                "HOLD",
+                "COMPLETED",
+            ]
+        },
+        isDelivered:{
+            type: Boolean,
+            default: false
+        },
+        deliveredDate:{
+            type: Date,
+        },
+        shippingAmount:{
+            type: Number,
+            required: true
+        },
+        paymentMethod: {
+            type: String,
+            require: [true, "Please Choose the payment method ."],
+            enum: [
+                "COD",
+                "CREDIT CARD",
+                "DEBIT CART",
+                "UPI",
+                "NET BANKING",
+                "OTHER"
+            ]
+        },
+        paymentInfo:{
+
+        }
+
     },
     { timestamps: true }
 );
