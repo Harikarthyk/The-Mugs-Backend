@@ -1,7 +1,8 @@
 const router = require("express").Router();
 const { 
     getCartInfo,
-    updateCart
+    updateCart,
+    adminCartInfo
 } = require("../controllers/cart");
 const { 
     isSignedIn,

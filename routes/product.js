@@ -3,7 +3,6 @@ const {
     updateProduct, 
     getProduct, 
     getAllProduct,
-    getAllProductAdmin
 } = require("../controllers/product");
 const { 
     isSignedIn, 
