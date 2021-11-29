@@ -37,6 +37,18 @@ const OrderSchema = new mongoose.Schema(
             quantity: {
                 type: Number,
                 default: 0
+            },
+            image:{
+                type: String,
+                required: true,
+            },
+            name: {
+                type: String,
+                required: true
+            },
+            price:{
+                type: Number,
+                required: true
             }
         }],
         phone:{
@@ -144,9 +156,8 @@ const OrderSchema = new mongoose.Schema(
             ]
         },
         paymentInfo:{
-
+            type: String,
         }
-
     },
     { timestamps: true }
 );
