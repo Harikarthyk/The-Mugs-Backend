@@ -14,6 +14,7 @@ const router = require("express").Router();
 // admin routes
 router.post("/admin/", isSignedIn, customRoles("admin"), addProduct);
 router.put("/admin/:productId/", isSignedIn, customRoles("admin"), updateProduct);
+router.delete("/admin/:productId", isSignedIn, customRoles("admin"), updateProduct);
 
 
 router.get("/:productId/", getProduct); 

@@ -87,3 +87,21 @@ exports.getAllProduct = async (req, res) => {
         });
     };
 };
+
+exports.deleteProduct = async(req, res) => {
+    try{
+        
+        const { productId } = req.params;
+
+        await Product.deleteOne({ _id: productId });
+
+        return res.status(200).json({
+            success: true,
+        });
+    }catch(error){
+        return res.status(400).json({
+            success: false,
+            error: error.message || error
+        })
+    }
+}
