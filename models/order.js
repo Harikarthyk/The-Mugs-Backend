@@ -16,12 +16,15 @@ const OrderSchema = new mongoose.Schema(
             required: true
         },
         tax: {
-            type: Boolean,
-            default: true
+            type: Number,
+            required: true
         },
-        coupon: {
-            type: Boolean,
-            default: true
+        discount:{
+            type: Number,
+            default: 0
+        },
+        couponCode: {
+            type: String,
         },
         user: {
             type: mongoose.SchemaTypes.ObjectId,
