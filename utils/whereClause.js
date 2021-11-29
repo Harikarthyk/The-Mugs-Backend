@@ -56,7 +56,7 @@ class WhereClause{
         
         const currPage = this.bigQuery.page;
 
-        const skip = RESULT_PER_PAGE * (currPage - 1);
+        const skip = currPage ? (RESULT_PER_PAGE * (currPage - 1)) : 0;
 
         this.base.skip(skip).limit(RESULT_PER_PAGE);
 
