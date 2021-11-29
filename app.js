@@ -3,6 +3,7 @@ const express = require("express");
 const fileUploader = require("express-fileupload");
 require("./config/database");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 const userRoutes = require("./routes/user");
 const productRoutes = require("./routes/product");
 const cartRoutes = require("./routes/cart");
@@ -16,6 +17,7 @@ const app = express();
 app.use(express.json());
 app.use(fileUploader());
 app.use(cookieParser());
+app.use(cors());
 
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/product", productRoutes);

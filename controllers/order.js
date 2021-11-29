@@ -33,7 +33,6 @@ exports.getOrder = async(req, res) => {
 
 exports.getAllOrders = async(req, res) => {
     try{
-
     }catch(error){
         return res.status(400).json({
             success: false,

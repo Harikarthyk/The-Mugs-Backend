@@ -56,7 +56,7 @@ exports.getProduct = async (req, res) => {
 exports.getAllProduct = async (req, res) => {
     try {
 
-        const productsObj = new WhereClause(Product, req.query, req.user.role).search().filter();
+        const productsObj = new WhereClause(Product, req.query, req.user?.role).search().filter();
 
 
         const availableProducts = await productsObj.base;
