@@ -40,7 +40,7 @@ exports.updateProduct = async (req, res) => {
 exports.getProduct = async (req, res) => {
     try {
         const { productId } = req.params;
-        const product = await Product.findById(productId);
+        const product = await Product.findById(productId).populate("categories", "name, icon, thumbnail");
         return res.status(200).json({
             success: true,
             product: product
