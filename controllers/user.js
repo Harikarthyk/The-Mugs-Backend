@@ -1,6 +1,7 @@
 const { cookieToken } = require("../utils/cookieToken");
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
+const WhereClause = require("../utils/whereClause");
 
 exports.googleLogin = async(req, res) => {
     try{
@@ -71,12 +72,31 @@ exports.userInfo = async(req, res) => {
 
 exports.adminAllUser = async(req, res) => {
     try{
-        const users = await User.find({});
+
+        const userObj = new WhereClause(User, req.query, req.user?.role).search().filter();
+
+        const availableUser = await userObj.base;
+
+        const availableUserCount = availableUser.length;
+
+        const { limit } = req.query;
+
+        const RESULT_PER_PAGE = Number(limit) || 2;
+
+        userObj.pager(RESULT_PER_PAGE);
+
+        const users = await userObj.base.clone();
+
+        const totalUserCount = users.length;
+
         return res.status(200).json({
             success: true,
-            users: users
+            totalUserCount,
+            users,
+            availableUserCount
         });
     }catch(error){
+        console.log(error)
         return res.status(500).json({
             success: false,
             error: error
