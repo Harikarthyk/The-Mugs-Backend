@@ -157,3 +157,61 @@ exports.adminUpdateUserInfo = async(req, re) => {
         });
     }
 }
+
+exports.adminUserStats = async(req, res) => {
+    try{
+        const date = new Date();
+        const lastYear = new Date(date.setFullYear(date.getFullYear() - 1));
+        const monthStrings = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
+
+        const data = await User.aggregate([
+            {
+                $match: { 
+                    createdAt: { 
+                        $gte: lastYear 
+                    } 
+                }
+            },
+            {
+                $group: {
+                    _id: {
+                        month: { $month: "$createdAt" },
+                        year: { $year: "$createdAt" },
+                    },
+                    count: {
+                        $sum: 1
+                    }
+                }
+              },
+              {
+                $project: {
+                  _id: "$_id.month",
+                  name:{
+                    $arrayElemAt: [
+                        monthStrings,
+                        "$_id.month"
+                    ]
+                  },
+                  "Active User":"$count", 
+                  count: 1,
+                }
+              }
+        ]);
+        data.unshift({
+            "count": 0,
+            "_id": data[0]?._id - 1 || 1,
+            "name": monthStrings[data[0]?._id - 1 || 1],
+            "Active User": 0
+        });
+        return res.status(200).json({
+            data,
+            success: true
+        });
+
+    }catch(error){
+        return res.status(500).json({
+            success: false,
+            error: error.message || error
+        })
+    }
+}
