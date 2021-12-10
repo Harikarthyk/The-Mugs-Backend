@@ -19,7 +19,7 @@ router.get("/", isSignedIn, userInfo);
 //admin routes
 
 router.get("/admin/users", isSignedIn, customRoles("admin"), adminAllUser);
-router.get("/admin/stats", adminUserStats);
+router.get("/admin/stats", isSignedIn, customRoles("admin"), adminUserStats);
 router.get("/admin/:userId", isSignedIn, customRoles("admin"), adminGetUserInfo);
 router.put("/admin/:userId", isSignedIn, customRoles("admin"), adminUpdateUserInfo);
 
