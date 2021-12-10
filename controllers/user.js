@@ -203,6 +203,12 @@ exports.adminUserStats = async(req, res) => {
             "name": monthStrings[data[0]?._id - 1 || 1],
             "Active User": 0
         });
+        data.unshift({
+            "count": 0,
+            "_id": data[0]?._id - 2 || 1,
+            "name": monthStrings[data[0]?._id - 2 || 1],
+            "Active User": 0 
+        });
         return res.status(200).json({
             data,
             success: true

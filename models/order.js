@@ -133,6 +133,7 @@ const OrderSchema = new mongoose.Schema(
                 "PROCESSING",
                 "HOLD",
                 "COMPLETED",
+                "DECLINED"
             ]
         },
         isDelivered:{
