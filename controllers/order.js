@@ -7,7 +7,7 @@ exports.createOrder = async(req, res) => {
         const totalOrders = await Order.countDocuments();
 
         const order = await Order.create({
-            orderNumber: totalOrders + 1,
+            orderNumber: totalOrders + 1001,
             ...req.body
         });
 
@@ -17,6 +17,7 @@ exports.createOrder = async(req, res) => {
         });
 
     }catch(error){
+        console.log(error)
         return res.status(400).json({
             success: false,
             error: error.message || error
@@ -84,7 +85,7 @@ exports.getAllOrders = async(req, res) => {
 
         orderObj.pager(RESULT_PER_PAGE);
 
-        const orders = await orderObj.base.clone();
+        const orders = await orderObj.base.clone().populate("user");
 
         const totalOrdersCount = orders.length;
 

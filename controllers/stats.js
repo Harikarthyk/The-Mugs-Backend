@@ -1,15 +1,15 @@
-const Order = require("../models/order");
+const Transaction = require("../models/transaction");
 
 exports.dashBoardStats = async(req, res) => {
     try{
 
         // totalRevenue
-        const totalRevenue = await Order.findOne(
+        const totalRevenue = await Transaction.findOne(
             { 
-                $ne : { status: "DECLINED" } 
+                status: "captured"  
             },
             {
-                totalRevenue: { $sum: "$total" }
+                totalRevenue: { $sum: "$amount" }
             }
         );
 

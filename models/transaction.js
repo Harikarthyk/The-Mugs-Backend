@@ -28,6 +28,14 @@ const TransactionSchema = new mongoose.Schema({
         created_at:{
             type: Date,
             required: [true, "Date mentioned ."]
+        },
+        orderNumber:{
+            type: String,
+            required: [true, "Order Number is required ."],
+        },
+        order:{
+            type: mongoose.SchemaTypes.ObjectId,
+            ref: "Order"
         }
     },
 );

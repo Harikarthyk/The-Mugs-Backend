@@ -12,6 +12,7 @@ const couponRoutes = require("./routes/coupon");
 const reviewRoutes = require("./routes/review");
 const orderRoutes = require("./routes/order");
 const statsRoutes = require("./routes/stats");
+const transactionRoutes = require("./routes/transaction");
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use("/api/v1/cart", cartRoutes);
 app.use("/api/v1/coupon", couponRoutes);
 app.use("/api/v1/review", reviewRoutes);
 app.use("/api/v1/order", orderRoutes);
+app.use("/api/v1/transaction", transactionRoutes);
 app.use("/api/v1/stats", statsRoutes);
 
 module.exports = app;

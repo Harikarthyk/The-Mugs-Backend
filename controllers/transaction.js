@@ -3,9 +3,30 @@ const Transaction = require("../models/transaction");
 exports.createTransaction = async(req, res) => {
     try{
 
-        const transaction = await Transaction.create(
-            req.body
-        );
+        const { order } = req.body;
+
+        if(!order){
+            return res.status(400).json({
+                success: false,
+                error: "Missing Order."
+            });
+        }
+
+        const transactions = await Transaction.find({
+            order
+        });
+
+        if(transactions.length > 0){
+            return res.status(400).json({
+                success: false,
+                error: "Transaction Invalid, Order already has an transaction."
+            })
+        }
+
+        const transaction = await Transaction.create({
+            ...req.body,
+            created_at: new Date()
+        });
 
         return res.status(201).json({
             success: true,
