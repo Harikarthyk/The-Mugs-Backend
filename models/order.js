@@ -4,8 +4,9 @@ const OrderSchema = new mongoose.Schema(
     {
         orderNumber: {
             type: String,
-            required: [true, "Please provide product name."],
-            trim: true
+            required: [true, "Please provide order Number."],
+            trim: true,
+            unique: [true, "Please Provide a unique order Number."]
         },
         subtotal: {
             type: Number,
@@ -56,7 +57,8 @@ const OrderSchema = new mongoose.Schema(
         }],
         phone:{
             type: String,
-            required:[true, "Please enter the phone number."]
+            required:[true, "Please enter the phone number."],
+            trim: true
         },
         notes:[],
         shippingAddress:{
@@ -161,6 +163,10 @@ const OrderSchema = new mongoose.Schema(
         },
         paymentInfo:{
             type: String,
+        },
+        transaction:{
+            type: mongoose.SchemaTypes.ObjectId,
+            ref: "Transaction",
         }
     },
     { timestamps: true }

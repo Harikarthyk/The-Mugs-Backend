@@ -71,7 +71,7 @@ exports.getUser = async(req, res, next) => {
         console.log(error);
         return res.status(400).json({
             success: false,
-            error: error
+            error: error.message || error
         });
     }
 }

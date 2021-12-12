@@ -6,7 +6,7 @@ const {
     getOrder
 } = require("../controllers/order");
 const { 
-    isSignedIn, customRoles,
+    isSignedIn,
 } = require("../middleware/user");
 
 

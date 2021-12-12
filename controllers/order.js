@@ -4,6 +4,18 @@ const Order = require("../models/order");
 exports.createOrder = async(req, res) => {
     try{
 
+        const totalOrders = await Order.countDocuments();
+
+        const order = await Order.create({
+            orderNumber: totalOrders + 1,
+            ...req.body
+        });
+
+        return res.status(201).json({
+            order,
+            success: true
+        });
+
     }catch(error){
         return res.status(400).json({
             success: false,
@@ -15,6 +27,18 @@ exports.createOrder = async(req, res) => {
 exports.updateOrder = async(req, res) => {
     try{
 
+        const { orderId } = req.params;
+
+        const order = await Order.findOneAndUpdate(
+            { _id: orderId }, 
+            { $set: req.body }
+        );
+
+        return res.status(200).json({
+            success: true,
+            order
+        });
+        
     }catch(error){
         return res.status(400).json({
             success: false,
@@ -25,6 +49,17 @@ exports.updateOrder = async(req, res) => {
 
 exports.getOrder = async(req, res) => {
     try{
+
+        const order = await Order.findOne(
+            { _id: orderId }
+        )
+        .populate("user");
+        
+
+        return res.status(200).json({
+            success: true,
+            order
+        });
 
     }catch(error){
         return res.status(400).json({
