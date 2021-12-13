@@ -7,7 +7,7 @@ exports.dashBoardStats = async(req, res) => {
                 status: "captured"  
             },
             {
-                totalRevenue: { $sum: "$amount" }
+                revenue: { $sum: "$amount" }
             }
         );
         const today = new Date();
@@ -23,7 +23,7 @@ exports.dashBoardStats = async(req, res) => {
                 }
             },
             {
-                totalRevenue: { $sum: "$amount" }
+                revenue: { $sum: "$amount" }
             }
         );
 
@@ -37,7 +37,7 @@ exports.dashBoardStats = async(req, res) => {
                 }
             },
             {
-                totalRevenue: { $sum: "$amount" }
+                revenue: { $sum: "$amount" }
             }
         );
 
@@ -53,7 +53,7 @@ exports.dashBoardStats = async(req, res) => {
                 }
             },
             {
-                totalRevenue: { $sum: "$amount" }
+                revenue: { $sum: "$amount" }
             }
         );
 
