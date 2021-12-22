@@ -23,13 +23,13 @@ exports.updateCategory = async(req, res) => {
     try{
         const { categoryId } = req.params;
         const category = await Category.findByIdAndUpdate(
-            categoryId,
+            { _id: categoryId },
             { $set : req.body },
             { new : true }
         );
         return res.status(200).json({
             success: true,
-            category: category,
+            category,
         });
     }catch(error){
         return res.status(400).json({
@@ -43,6 +43,10 @@ exports.getCategories = async(req, res) => {
     try{
         const categoriesObj = new WhereClause(Category, req.query).search().filter();
 
+        const availableCategories = await categoriesObj.base;
+
+        const availableCategoriesCount = availableCategories.length;
+
         const { limit } = req.query;
 
         const RESULT_PER_PAGE = Number(limit) || 25;
@@ -55,8 +59,9 @@ exports.getCategories = async(req, res) => {
 
         return res.status(200).json({
             success: true,
-            categories: categories,
-            totalCategoriesCount
+            categories,
+            totalCategoriesCount,
+            availableCategoriesCount
         });
         
     }catch(error){
