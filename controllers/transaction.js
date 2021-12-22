@@ -1,4 +1,5 @@
 const Transaction = require("../models/transaction");
+const WhereClause = require("../utils/whereClause");
 
 exports.createTransaction = async(req, res) => {
     try{
@@ -69,7 +70,7 @@ exports.getAllTransaction = async(req, res) => {
         const transactionObj = new WhereClause(Transaction, req.query).search().filter();
 
         const availableTransactions = await transactionObj.base;
-
+    
         const availableTransactionsCount = availableTransactions.length;
 
         const { limit } = req.query;

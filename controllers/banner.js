@@ -1,4 +1,5 @@
 const Banner = require("../models/banner");
+const WhereClause = require("../utils/whereClause");
 exports.createBanner = async(req, res) => {
     try{
         const banner = Banner.create(req.body);
@@ -67,7 +68,7 @@ exports.getBanners = async(req, res) => {
 
         bannerObj.pager(RESULT_PER_PAGE);
 
-        const banners = await bannerObj.base;
+        const banners = await bannerObj.base.clone();
 
         const totalBannersCount = banners.length;
 
