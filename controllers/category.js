@@ -53,7 +53,7 @@ exports.getCategories = async(req, res) => {
 
         categoriesObj.pager(RESULT_PER_PAGE);
 
-        const categories = await categoriesObj.base;
+        const categories = await categoriesObj.base.clone();
 
         const totalCategoriesCount = categories.length;
 

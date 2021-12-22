@@ -42,13 +42,27 @@ exports.getCoupon = async(req, res) => {
 exports.getAllCoupon = async(req, res) => {
     try{
 
-        const couponObj = new WhereClause(Coupon, req.query, req.user.role).search().filter();
+        const couponsObj = new WhereClause(Coupon, req.query).search().filter();
 
-        const coupons = await couponObj.base;
+        const availableCoupons = await couponsObj.base;
+
+        const availableCouponsCount = availableCoupons.length;
+
+        const { limit } = req.query;
+
+        const RESULT_PER_PAGE = Number(limit) || 25;
+
+        couponsObj.pager(RESULT_PER_PAGE);
+
+        const coupons = await couponsObj.base.clone();
+
+        const totalCouponsCount = coupons.length;
 
         return res.status(200).json({
             success: true,
-            coupons
+            coupons,
+            totalCouponsCount,
+            availableCouponsCount
         });
 
     }catch(error){

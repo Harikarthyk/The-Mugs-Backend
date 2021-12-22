@@ -63,3 +63,35 @@ exports.updateTransaction = async(req, res) => {
         });
     }
 }
+
+exports.getAllTransaction = async(req, res) => {
+    try{
+        const transactionObj = new WhereClause(Transaction, req.query).search().filter();
+
+        const availableTransactions = await transactionObj.base;
+
+        const availableTransactionsCount = availableTransactions.length;
+
+        const { limit } = req.query;
+
+        const RESULT_PER_PAGE = Number(limit) || 25;
+
+        transactionObj.pager(RESULT_PER_PAGE);
+
+        const transactions = await transactionObj.base.clone();
+
+        const totalTransactionsCount = transactions.length;
+
+        return res.status(200).json({
+            success: true,
+            transactions,
+            totalTransactionsCount,
+            availableTransactionsCount
+        });
+    }catch(error){
+        return res.status(400).json({
+            success: false,
+            error: error.message || error
+        });
+    }
+}
