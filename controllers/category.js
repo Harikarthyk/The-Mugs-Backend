@@ -4,6 +4,7 @@ const WhereClause = require("../utils/whereClause");
 
 exports.createCategory = async(req, res) => {
     try{
+        req.body["user"] = req.user._id;
         const newCategory = new Category(req.body);
         const savedCategory = await newCategory.save();
         return res.status(200).json({
