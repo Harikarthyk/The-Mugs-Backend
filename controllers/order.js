@@ -51,6 +51,8 @@ exports.updateOrder = async(req, res) => {
 exports.getOrder = async(req, res) => {
     try{
 
+        const { orderId } = req.params;
+
         const order = await Order.findOne(
             { _id: orderId }
         )

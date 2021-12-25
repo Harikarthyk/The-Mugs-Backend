@@ -24,7 +24,7 @@ exports.getCoupon = async(req, res) => {
 
         const { couponId } = req.params;
 
-        const coupon = await Coupon.findOne(couponId);
+        const coupon = await Coupon.findOne({_id: couponId});
 
         return res.status(200).json({
             success: true,
@@ -75,6 +75,8 @@ exports.getAllCoupon = async(req, res) => {
 
 exports.updateCoupon = async(req, res) => {
     try{
+        const { couponId } = req.params;
+        console.log(couponId, "as")
         const coupon = await Coupon.findOneAndUpdate(
             {
                 _id: couponId,
