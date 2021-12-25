@@ -47,9 +47,19 @@ const couponSchema = new mongoose.Schema({
             default: false
         },
         users:[{
-            type: mongoose.Schema.Types.ObjectId, 
-            ref: "User",
-            require: [true]
+            user: {
+                type: mongoose.Schema.Types.ObjectId, 
+                ref: "User",
+                require: [true]
+            },
+            used: {
+                type: Number,
+                default: 1
+            },
+            order:{
+                type: mongoose.Schema.Types.ObjectId, 
+                ref: "Order",
+            }
         }]
     },
     { timestamps: true }
