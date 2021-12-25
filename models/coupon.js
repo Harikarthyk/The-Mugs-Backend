@@ -31,8 +31,14 @@ const couponSchema = new mongoose.Schema({
                 "ORDER_ABOVE_199",
                 "ORDER_ABOVE_499",
                 "ORDER_ABOVE_599",
+                "EVERY_TIME",
                 "OTHER"
             ]
+        },
+        count: {
+            type: "String",
+            required: [true, "Count is required."],
+            default: 0
         },
         dateValid:{
             type: Date,
