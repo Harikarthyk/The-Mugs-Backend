@@ -10,7 +10,7 @@ const {
 } = require("../middleware/user");
 
 
-router.get("/:orderId", getOrder);
+router.get("/:orderId", isSignedIn, getOrder);
 router.get("/", isSignedIn,  getAllOrders);
 router.post("/", isSignedIn, createOrder);
 router.put("/:orderId", isSignedIn, updateOrder);
