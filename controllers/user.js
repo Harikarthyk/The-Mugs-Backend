@@ -131,7 +131,7 @@ exports.adminGetUserInfo = async(req, res) => {
     }
 }
 
-exports.adminUpdateUserInfo = async(req, re) => {
+exports.adminUpdateUserInfo = async(req, res) => {
     try{
         
         const { userId } = req.params;

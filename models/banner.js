@@ -18,12 +18,10 @@ const BannerSchema = new mongoose.Schema({
             trim: true
         },
         products: [
-            {   
-                product: {
+         {
                     type: mongoose.Schema.Types.ObjectId,
                     ref: "Product",
-                },
-            }
+        },
         ],
         isActive:{
             type: Boolean,

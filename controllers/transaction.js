@@ -79,7 +79,7 @@ exports.getAllTransaction = async(req, res) => {
 
         transactionObj.pager(RESULT_PER_PAGE);
 
-        const transactions = await transactionObj.base.clone();
+        const transactions = await transactionObj.base.clone().populate("user", "name email");
 
         const totalTransactionsCount = transactions.length;
 

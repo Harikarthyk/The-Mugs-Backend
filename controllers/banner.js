@@ -40,7 +40,7 @@ exports.getBannerProducts = async(req, res) => {
         const { bannerId } = req.params;
         const banner = await Banner.findOne(
             { _id: bannerId },
-        ).populate("products.product");
+        ).populate("products");
 
         return res.status(200).json({
             success: true,
@@ -80,6 +80,7 @@ exports.getBanners = async(req, res) => {
         });
         
     }catch(error){
+        console.log(error,"--")
         return res.status(400).json({
             success: false,
             error: error
