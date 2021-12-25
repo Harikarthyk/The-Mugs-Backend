@@ -50,7 +50,6 @@ const couponSchema = new mongoose.Schema({
             user: {
                 type: mongoose.Schema.Types.ObjectId, 
                 ref: "User",
-                require: [true]
             },
             used: {
                 type: Number,
