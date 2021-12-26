@@ -19,6 +19,6 @@ router.delete("/admin/:productId", isSignedIn, customRoles("admin"), deleteProdu
 
 
 router.get("/:productId/", getProduct); 
-router.get("/", getUser, getAllProduct);
+router.get("/", getAllProduct);
 
 module.exports = router;

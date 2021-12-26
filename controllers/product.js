@@ -58,7 +58,6 @@ exports.getAllProduct = async (req, res) => {
 
         const productsObj = new WhereClause(Product, req.query, req.user?.role).search().filter();
 
-
         const availableProducts = await productsObj.base;
 
         const availableProductCount = availableProducts.length;

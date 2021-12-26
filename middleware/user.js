@@ -26,7 +26,7 @@ exports.isSignedIn = async (req, res, next) => {
 
     } catch (error) {
         console.log(error);
-        return res.status(400).json({
+        return res.status(403).json({
             success: false,
             error: error
         });
@@ -52,6 +52,7 @@ exports.getUser = async(req, res, next) => {
             req.body.token ||
             req.header("Authorization")?.replace("Bearer ", "");
 
+        
         if (!token) {
             req.user = null;
             return next();

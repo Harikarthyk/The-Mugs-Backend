@@ -19,11 +19,11 @@ exports.googleLogin = async(req, res) => {
                     expiresIn:"3d"
                 }
             );
-            return res.status(200).json({
-                success: true,
+            return cookieToken({
                 user: user,
-                token: accessToken,
-            });
+                success: true,
+                token: accessToken
+            }, res);
             
         }
         
@@ -37,6 +37,66 @@ exports.googleLogin = async(req, res) => {
             }
         );
         
+        return cookieToken({
+            user: user,
+            success: true,
+            token: accessToken
+        }, res);
+
+    }catch(error){
+        console.log(error)
+        return res.status(400).json({
+            success: false,
+            error: error?.message || error,
+        });
+    }
+}
+
+exports.adminGoogleLogin = async(req, res) => {
+    try{
+        const { googleId } = req.body;
+        const users = await User.find({googleId : googleId});
+        const { JWT_SECRET } = process.env;
+           
+        if(users.length === 0){
+            // const user = await new User(req.body).save();
+            // const accessToken = jwt.sign({
+            //         id: user._id,
+            //         isAdmin: user.isAdmin,
+            //     },
+            //     JWT_SECRET,{
+            //         expiresIn:"3d"
+            //     }
+            // );
+            // return res.status(200).json({
+            //     success: true,
+            //     user: user,
+            //     token: accessToken,
+            // });
+            
+            return res.status(400).json({
+                success: false,
+                error: "No Admin Account Exists with this Id."
+            });
+            
+        }
+        
+        const user = users[0];
+        if(user.role === "USER"){
+            return res.status(400).json({
+                success: false,
+                error: "No Admin Account Exists with this Id."
+            });
+        }
+        const accessToken = jwt.sign({
+            id: user._id,
+                isAdmin: user.isAdmin,
+            },
+            JWT_SECRET,{
+                expiresIn:"3d"
+            }
+        );
+        user["token"] = accessToken;
         return cookieToken({
             user: user,
             success: true,
