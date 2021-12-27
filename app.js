@@ -14,6 +14,7 @@ const orderRoutes = require("./routes/order");
 const statsRoutes = require("./routes/stats");
 const transactionRoutes = require("./routes/transaction");
 const bannerRoutes = require("./routes/banner");
+const inviteRoutes = require("./routes/invite");
 
 const app = express();
 
@@ -42,5 +43,6 @@ app.use("/api/v1/order", orderRoutes);
 app.use("/api/v1/transaction", transactionRoutes);
 app.use("/api/v1/stats", statsRoutes);
 app.use("/api/v1/banner", bannerRoutes);
+app.use("/api/v1/invite", inviteRoutes);
 
 module.exports = app;

@@ -2,6 +2,7 @@ const { cookieToken } = require("../utils/cookieToken");
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const WhereClause = require("../utils/whereClause");
+const Invite = require("../models/invite");
 
 exports.googleLogin = async(req, res) => {
     try{
@@ -37,6 +38,73 @@ exports.googleLogin = async(req, res) => {
             }
         );
         
+        return cookieToken({
+            user: user,
+            success: true,
+            token: accessToken
+        }, res);
+
+    }catch(error){
+        console.log(error)
+        return res.status(400).json({
+            success: false,
+            error: error?.message || error,
+        });
+    }
+}
+
+
+exports.invitedAdminLogin = async(req, res) => {
+    try{
+        const { googleId } = req.body;
+        const users = await User.find({googleId : googleId});
+        const { JWT_SECRET } = process.env;
+           
+        if(users.length === 0){
+            const { inviteId } = req.params;
+            const invites = await Invite.findOne({ _id: inviteId, email: req.body.email });
+            if(invites !== null){
+                const user = await new User(req.body).save();
+                const accessToken = jwt.sign({
+                        id: user._id,
+                        isAdmin: user.isAdmin,
+                    },
+                    JWT_SECRET,{
+                        expiresIn:"3d"
+                    }
+                );
+                return cookieToken({
+                    user: user,
+                    success: true,
+                    token: accessToken
+                }, res);
+        
+            }
+            
+            
+            return res.status(400).json({
+                success: false,
+                error: "No Admin Account Exists with this Id."
+            });
+            
+        }
+        
+        const user = users[0];
+        if(user.role === "USER"){
+            return res.status(400).json({
+                success: false,
+                error: "No Admin Account Exists with this Id."
+            });
+        }
+        const accessToken = jwt.sign({
+            id: user._id,
+                isAdmin: user.isAdmin,
+            },
+            JWT_SECRET,{
+                expiresIn:"3d"
+            }
+        );
+        user["token"] = accessToken;
         return cookieToken({
             user: user,
             success: true,

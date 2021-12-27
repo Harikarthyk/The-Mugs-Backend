@@ -6,7 +6,8 @@ const {
     adminGetUserInfo,
     adminUpdateUserInfo,
     adminUserStats,
-    adminGoogleLogin
+    adminGoogleLogin,
+    invitedAdminLogin
 } = require("../controllers/user");
 const { 
     isSignedIn, 
@@ -19,6 +20,7 @@ router.get("/", isSignedIn, userInfo);
 
 //admin routes
 router.post("/admin/google", adminGoogleLogin);
+router.post("/invite/admin/google/:inviteId", invitedAdminLogin);
 router.get("/admin/users", isSignedIn, customRoles("admin"), adminAllUser);
 router.get("/admin/stats", isSignedIn, customRoles("admin"), adminUserStats);
 router.get("/admin/:userId", isSignedIn, customRoles("admin"), adminGetUserInfo);
