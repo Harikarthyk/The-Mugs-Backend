@@ -29,6 +29,10 @@ const corsConfig = {
 
 app.use(cors(corsConfig));
 
+app.get("/test", (req, res) => {
+  console.log("Testing...");
+})
+
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/product", productRoutes);
 app.use("/api/v1/category", categoryRoutes);
