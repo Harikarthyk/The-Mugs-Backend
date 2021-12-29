@@ -21,10 +21,12 @@ const app = express();
 app.use(express.json());
 app.use(fileUploader());
 app.use(cookieParser());
+
 const corsConfig = {
   credentials: true,
   origin: true,
 };
+
 app.use(cors(corsConfig));
 
 app.use("/api/v1/user", userRoutes);
