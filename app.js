@@ -21,16 +21,11 @@ const app = express();
 app.use(express.json());
 app.use(fileUploader());
 app.use(cookieParser());
-const corsOptions = {
-    //To allow requests from client
-    origin: [
-      "http://localhost:3000",
-      "https://mugs07.netlify.app/"
-    ],
-    credentials: true,
-    exposedHeaders: ["set-cookie"],
-  };
-app.use(cors(corsOptions));
+const corsConfig = {
+  credentials: true,
+  origin: true,
+};
+app.use(cors(corsConfig));
 
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/product", productRoutes);
