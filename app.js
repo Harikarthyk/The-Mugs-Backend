@@ -31,6 +31,7 @@ app.use(cors(corsConfig));
 
 app.get("/test", (req, res) => {
   console.log("Testing...");
+  return res.send("Server is ready.");
 })
 
 app.use("/api/v1/user", userRoutes);
