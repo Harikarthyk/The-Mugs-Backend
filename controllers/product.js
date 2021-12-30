@@ -1,4 +1,4 @@
-const Product = require("../models/Product");
+const Product = require("../models/product");
 const WhereClause = require("../utils/whereClause");
 
 exports.addProduct = async (req, res) => {

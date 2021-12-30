@@ -1,5 +1,5 @@
 const Category = require("../models/category");
-const Product = require("../models/Product");
+const Product = require("../models/product");
 const WhereClause = require("../utils/whereClause");
 
 exports.createCategory = async(req, res) => {
