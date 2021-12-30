@@ -29,7 +29,7 @@ const corsConfig = {
 
 app.use(cors(corsConfig));
 
-app.get("/test", (req, res) => {
+app.get("/", (req, res) => {
   return res.send("Server is ready.");
 })
 
