@@ -64,7 +64,10 @@ exports.invitedAdminLogin = async(req, res) => {
             const { inviteId } = req.params;
             const invites = await Invite.findOne({ _id: inviteId, email: req.body.email });
             if(invites !== null){
-                const user = await new User(req.body).save();
+                const user = await new User({
+                    ...req.body, 
+                    "role": "ADMIN"
+                }).save();
                 const accessToken = jwt.sign({
                         id: user._id,
                         isAdmin: user.isAdmin,
