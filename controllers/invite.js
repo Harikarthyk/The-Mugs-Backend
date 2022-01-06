@@ -17,7 +17,8 @@ exports.createInvitation = async(req, res) => {
             }
         });
         const subject = "Login Invitation for HKs new Web App";
-        const url = `https://mugs07.netlify.app/login/${invite._id}`
+        const PRE_URL = process.env.PRE_URL;
+        const url = `${PRE_URL}${invite._id}`
         const html = `
             <a href=${url}>Click here to Join the link</a>
         `
