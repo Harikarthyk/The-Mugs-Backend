@@ -6,6 +6,11 @@ const InviteSchema = new mongoose.Schema({
             type: String,
             required: [true, "Please provide an email"],
         },
+        role: {
+            type: String,
+            default: 'USER',
+            enum: ["ADMIN", "STAFF", "USER"]
+        }
     },
     { timestamps: true }
 );

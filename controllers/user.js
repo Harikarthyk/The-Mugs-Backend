@@ -66,11 +66,11 @@ exports.invitedAdminLogin = async(req, res) => {
             if(invites !== null){
                 const user = await new User({
                     ...req.body, 
-                    "role": "ADMIN"
+                    "role": invites.role || "USER"
                 }).save();
                 const accessToken = jwt.sign({
                         id: user._id,
-                        isAdmin: user.isAdmin,
+                        isAdmin: user.role !== "USER" ? false : true,
                     },
                     JWT_SECRET,{
                         expiresIn:"3d"
