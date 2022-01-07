@@ -1,8 +1,24 @@
 const Invite = require("../models/invite");
 const nodemailer = require("nodemailer");
+const User = require("../models/user");
 
 exports.createInvitation = async(req, res) => {
     try{
+        const { email, role } = req.body;
+        if(!email || !role){
+            return res.status(400).json({
+                success: false,
+                error: "All Fields are required."
+            });
+        }
+        const user = await User.findOne({ email });
+        if(user){
+            return res.status(400).json({
+                success: false,
+                error: "User with this mail Id Already have an account."
+            });
+        }
+        
         const invite = await Invite.create(req.body);
         const { SENDER_EMAIL, SENDER_EMAIL_PASSWORD } = process.env;
         const transporter = nodemailer.createTransport({
