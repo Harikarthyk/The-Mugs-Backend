@@ -128,7 +128,6 @@ exports.adminGoogleLogin = async(req, res) => {
         const { googleId } = req.body;
         const users = await User.find({googleId : googleId});
         const { JWT_SECRET } = process.env;
-           
         if(users.length === 0){
             // const user = await new User(req.body).save();
             // const accessToken = jwt.sign({
@@ -175,9 +174,9 @@ exports.adminGoogleLogin = async(req, res) => {
         }, res);
 
     }catch(error){
-        console.log(error)
+        // console.log(error)
         return res.status(400).json({
-            success: false,
+            success: false, 
             error: error?.message || error,
         });
     }
@@ -294,7 +293,7 @@ exports.adminUserStats = async(req, res) => {
         const date = new Date();
         const lastYear = new Date(date.setFullYear(date.getFullYear() - 1));
         const monthStrings = ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
-
+        
         const data = await User.aggregate([
             {
                 $match: { 
@@ -318,23 +317,33 @@ exports.adminUserStats = async(req, res) => {
                 $project: {
                   _id: "$_id.month",
                   name:{
-                    $arrayElemAt: [
-                        monthStrings,
-                        "$_id.month"
-                    ]
+                    $concat: [ 
+                        {$arrayElemAt: [
+                            monthStrings,
+                            "$_id.month"
+                        ]},
+                        " ",
+                        {$toString: "$_id.year"}
+                    ]           
                   },
+                  year:"$_id.year",
+                  month: "$_id.month",
                   "Active User":"$count", 
                   count: 1,
                 }
-              }
-        ]);
+              },
+              { $sort : { year : 1, month: 1 } }
+        ])
+        // .sort(
+        //     {"createdAt": 1}
+        // );
         
-        data.unshift({
-            "count": 0,
-            "_id": data[0]?._id - 1 || 1,
-            "name": monthStrings[data[0]?._id - 1 || 1],
-            "Active User": 0
-        });
+        // data.unshift({
+        //     "count": 0,
+        //     "_id": data[0]?._id - 1 || 1,
+        //     "name": monthStrings[data[0]?._id - 1 || 1],
+        //     "Active User": 0
+        // });
 
         // data.unshift({
         //     "count": 0,

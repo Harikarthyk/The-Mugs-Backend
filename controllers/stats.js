@@ -43,7 +43,7 @@ exports.dashBoardStats = async(req, res) => {
 
         const dayStart = new Date();
 
-        dayStart.setUTCHours(0,0,0,0);
+        // dayStart.setUTCHours(0,0,0,0);
 
         const totalRevenueByToday = await Transaction.findOne(
             {
