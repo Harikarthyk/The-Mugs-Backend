@@ -17,7 +17,7 @@ exports.dashBoardStats = async(req, res) => {
         const totalRevenueByMonth = await Transaction.findOne(
             {
                 status: "captured",
-                createdAt: {
+                created_at: {
                     "$gte": monthStart,
                     "$lte": today
                 }
@@ -25,13 +25,16 @@ exports.dashBoardStats = async(req, res) => {
             {
                 revenue: { $sum: "$amount" }
             }
-        );
+        )|| {
+            _id: "totalRevenueByMonth",
+            "revenue": 0
+        };
 
         const weekStart = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + 1);
         const totalRevenueByWeek = await Transaction.findOne(
             {
                 status: "captured",
-                createdAt: {
+                created_at: {
                     "$gte": weekStart,
                     "$lte": today
                 }
@@ -39,23 +42,28 @@ exports.dashBoardStats = async(req, res) => {
             {
                 revenue: { $sum: "$amount" }
             }
-        );
+        )|| {
+            _id: "totalRevenueByWeek",
+            "revenue": 0
+        };
 
         const dayStart = new Date();
 
-        // dayStart.setUTCHours(0,0,0,0);
-
+        dayStart.setUTCHours(0,0,0,0);
         const totalRevenueByToday = await Transaction.findOne(
             {
                 status: "captured",
-                createdAt: {
+                created_at: {
                     "$gte": dayStart,
                 }
             },
             {
                 revenue: { $sum: "$amount" }
             }
-        );
+        ) || {
+            _id: "totalRevenueByToday",
+            "revenue": 0
+        };
 
         return res.status(200).json({
             totalRevenue,
