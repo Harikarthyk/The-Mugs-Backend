@@ -333,17 +333,17 @@ exports.adminUserStats = async(req, res) => {
                 }
               },
               { $sort : { year : 1, month: 1 } }
-        ])
-        // .sort(
-        //     {"createdAt": 1}
-        // );
-        
-        // data.unshift({
-        //     "count": 0,
-        //     "_id": data[0]?._id - 1 || 1,
-        //     "name": monthStrings[data[0]?._id - 1 || 1],
-        //     "Active User": 0
-        // });
+        ]);
+        const preYear = data[0]?.month  === 1 ? data[0]?.year - 1 : data[0]?.year || 2001;
+        const preMonthIndex = data[0]?.month  === 1 ? 12 : data[0]?.month - 1|| 1;
+        data.unshift({
+            "count": 0,
+            "_id": data[0]?._id - 1 || 1,
+            "name": `${monthStrings[preMonthIndex]} ${preYear}`,
+            "Active User": 0,
+            year: preYear,
+            month: preMonthIndex
+        });
 
         // data.unshift({
         //     "count": 0,
