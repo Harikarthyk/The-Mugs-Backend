@@ -215,7 +215,7 @@ exports.adminAllUser = async(req, res) => {
 
         userObj.pager(RESULT_PER_PAGE);
 
-        const users = await userObj.base.clone();
+        const users = await userObj.base.clone().sort({createdAt: -1});
 
         const totalUserCount = users.length;
 
