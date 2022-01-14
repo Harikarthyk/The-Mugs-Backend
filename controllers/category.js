@@ -23,11 +23,25 @@ exports.createCategory = async(req, res) => {
 exports.updateCategory = async(req, res) => {
     try{
         const { categoryId } = req.params;
+        const { updateProductStatus } = req.body;
         const category = await Category.findByIdAndUpdate(
             { _id: categoryId },
             { $set : req.body },
             { new : true }
         );
+
+        if(updateProductStatus === true){
+            await Product.updateMany(
+                { 
+                    category: categoryId,
+                    isDeleted: false
+                },
+                {
+                    $set:{ isActive: req.body.isActive }
+                }
+            );
+        }
+
         return res.status(200).json({
             success: true,
             category,
