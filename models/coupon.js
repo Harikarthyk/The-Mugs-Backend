@@ -21,7 +21,9 @@ const couponSchema = new mongoose.Schema({
             required: [true, "Please enter the discount Type."],
             enum: ["FLAT", "PERCENTAGE"]
         },
-        limit:{
+        // UNLIMITED - User Can use this for all orders
+        // ONE_TIME_USER - User Can use this once
+        limit:[{
             type: "String",
             required: [true, "Please enter coupon limit"],
             enum: [
@@ -34,6 +36,10 @@ const couponSchema = new mongoose.Schema({
                 "EVERY_TIME",
                 "OTHER"
             ]
+        }],
+        minAmount:{
+            type: Number,
+            required: [true, "Enter the Minium Amount ."]
         },
         count: {
             type: "String",

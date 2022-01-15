@@ -1,4 +1,6 @@
 const Cart = require("../models/cart");
+const Coupon = require("../models/coupon");
+const Order = require("../models/order");
 
 exports.getCartInfo = async(req, res) => {
     try{
@@ -122,5 +124,74 @@ exports.adminCartInfo = async(req, res) => {
             success: false,
             error: error?.message || error
         });
+    }
+}
+
+exports.applyCoupon = async(req, res) => {
+    try{
+        const { cartId } = req.params;
+        const { name, total } = req.body;
+        const coupon = await Coupon.findOne({ name });
+        if(coupon === null){
+            return res.status(400).json({
+                success: false,
+                error: "Coupon In valid."
+            });
+        };
+        const { limit, minAmount } = coupon;
+
+        if( total < minAmount ){
+            return res.status(400).json({
+                success: false,
+                error: "Coupon In valid."
+            });
+        }
+
+
+        for(let i = 0; i < limit.length; i++){
+            const curr = limit[i];
+            if(curr === "UNLIMITED"){
+                continue;
+            }else if(curr === "ONE_TIME_USER"){
+                const { users } = coupon;
+                for(let user in users){
+                    if(user.user.toString() === req.user._id.toString()){
+                        return res.status(400).json({
+                            success: false,
+                            error: "Coupon Already used."
+                        });
+                    }
+                }
+            }else if(curr === "FIRST_ORDER"){
+                const orders = await Order.find({ user: req.user._id });
+                if(orders.length > 0){
+                    return res.status(400).json({
+                        success: false,
+                        error: "Coupon Not Applicable."
+                    });
+                }
+            }   
+        }
+
+        await Coupon.findOneAndUpdate(
+            { _id: coupon._id },
+            {
+                $set: updatedCoupon
+            }
+        );
+
+        await Cart.findOneAndUpdate({ _id: cartId }, {
+            $set: {
+                coupon: name
+            }
+        });
+
+        return res.status(200).json({
+            success: false,
+            message: "success"
+        });
+        
+    }catch(error){
+
     }
 }

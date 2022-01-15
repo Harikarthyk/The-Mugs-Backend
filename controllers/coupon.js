@@ -76,13 +76,15 @@ exports.getAllCoupon = async(req, res) => {
 exports.updateCoupon = async(req, res) => {
     try{
         const { couponId } = req.params;
-        console.log(couponId, "as")
         const coupon = await Coupon.findOneAndUpdate(
             {
                 _id: couponId,
             },
             {
                 $set: req.body
+            },
+            {
+                new : true
             }
         );
 

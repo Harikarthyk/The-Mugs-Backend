@@ -2,7 +2,8 @@ const router = require("express").Router();
 const { 
     getCartInfo,
     updateCart,
-    adminCartInfo
+    adminCartInfo,
+    applyCoupon
 } = require("../controllers/cart");
 const { 
     isSignedIn,
@@ -12,6 +13,7 @@ const {
 
 router.get("/", isSignedIn, getCartInfo);
 router.put("/", isSignedIn,  updateCart);
+router.put("/coupon", isSignedIn, applyCoupon);
 
 // admin routes 
 router.post("/admin/:userId/",isSignedIn, customRoles("admin"), adminCartInfo);     
