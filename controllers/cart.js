@@ -4,7 +4,7 @@ const Order = require("../models/order");
 
 exports.getCartInfo = async(req, res) => {
     try{
-        let cart = await Cart.findOne({ user: req.user._id, isActive: true });
+        let cart = await Cart.findOne({ user: req.user._id, isActive: true }).populate("items.product");
 
         if(cart === null){
             cart = await Cart.create({
@@ -17,7 +17,7 @@ exports.getCartInfo = async(req, res) => {
         }
 
         return res.status(200).json({
-            success: false,
+            success: true,
             cart
         });
 
@@ -41,7 +41,7 @@ exports.updateCart = async(req, res) => {
         );
 
         return res.status(200).json({
-            success: false,
+            success: true,
             cart
         });
 
@@ -131,7 +131,7 @@ exports.pushOrRemoveItemToCart = async(req, res) => {
 
 
         return res.status(200).json({
-            success: false,
+            success: true,
             cart
         });
 
