@@ -3,7 +3,8 @@ const {
     getCartInfo,
     updateCart,
     adminCartInfo,
-    applyCoupon
+    applyCoupon,
+    pushOrRemoveItemToCart
 } = require("../controllers/cart");
 const { 
     isSignedIn,
@@ -14,6 +15,7 @@ const {
 router.get("/", isSignedIn, getCartInfo);
 router.put("/", isSignedIn,  updateCart);
 router.put("/coupon", isSignedIn, applyCoupon);
+router.put("/items", isSignedIn, pushOrRemoveItemToCart);
 
 // admin routes 
 router.post("/admin/:userId/",isSignedIn, customRoles("admin"), adminCartInfo);     

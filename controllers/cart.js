@@ -32,15 +32,6 @@ exports.getCartInfo = async(req, res) => {
 exports.updateCart = async(req, res) => {
     try{
 
-        const { items, subtotal } = req.body;
-
-        if(!items || !subtotal){
-            return res.status(400).json({
-                success: false,
-                error: "Cart items missing."
-            });
-        }
-
         let cart = await Cart.findOneAndUpdate(
             { user: req.user._id, isActive: true },
             {
@@ -48,41 +39,6 @@ exports.updateCart = async(req, res) => {
             },
             { new: true }
         );
-
-
-        // let cart = await Cart.findOneAndUpdate(
-        //     { user: req.user._id, isActive: true, "items.product": item.product }, 
-        //     { 
-        //         $push: { items: item }, 
-        //         $inc: { subtotal: subtotal } 
-        //     }, 
-        //     { new: true}
-        // );
-
-        // if(cart === null){
-        //     cart = await Cart.findOneAndUpdate(
-        //         { user: req.user._id, isActive: true }, 
-        //         { 
-        //             $push: { items: item }, 
-        //             $inc: { subtotal: subtotal } 
-        //         }, 
-        //         { new: true}
-        //     );
-
-        //     if(cart === null){
-        //         cart = await Cart.create({
-        //             user: req.user._id,
-        //             items: [item],
-        //             subtotal
-        //         });
-        //     }
-            
-        //     return res.status(201).json({
-        //         success: true,
-        //         cart: cart
-        //     })
-        // }
-        
 
         return res.status(200).json({
             success: false,
@@ -96,6 +52,97 @@ exports.updateCart = async(req, res) => {
         });
     }
 }
+
+exports.pushOrRemoveItemToCart = async(req, res) => {
+    try{
+
+        const { item, mode, price } = req.body;
+
+        if(!item || !mode || !price){
+            return res.status(400).json({
+                success: false,
+                error: "Cart items missing."
+            });
+        }
+
+        let cart = await Cart.findOne(
+            { user: req.user._id, isActive: true }, 
+        );
+
+        if(cart === null){
+            cart = await Cart.create({
+                user: req.user._id
+            });
+        }
+
+            
+        if(mode === "ADD"){
+            let temp = [];
+            let isFound = false;
+            let subtotal = item.price * item.quantity;
+            for(let i = 0 ; i < cart?.items?.length || 0; i++){
+                let itr_item = cart.items[i];
+                if(isFound === false && itr_item.product.toString() === item.product){
+                    isFound = true;
+                    itr_item.quantity = item.quantity;
+                }else{
+                    subtotal += (itr_item.price * itr_item.quantity);
+                }
+                temp.push(itr_item);
+            }
+            if(isFound === true){
+                cart.items = temp;
+                cart = await Cart.findOneAndUpdate(
+                    { _id: cart._id },
+                    { 
+                        $set: {
+                            subtotal: subtotal,
+                            items: temp
+                        } 
+                    },
+                    {
+                        new: true
+                    }
+                );
+                return res.status(200).json({
+                    success: true,
+                    cart
+                });
+            }
+            
+            cart = await Cart.findOneAndUpdate(
+                { _id: cart._id }, 
+                { 
+                    $push: { items: item }, 
+                    $set: { subtotal: subtotal } 
+                }, 
+                { new: true }
+            );
+        }else if(mode === "REMOVE"){
+            cart = await Cart.findOneAndUpdate(
+                { _id: cart._id }, 
+                { 
+                    $pull: { items: { product: item.product } }, 
+                    $inc: { subtotal: -(price * item.quantity) } 
+                }, 
+                { new: true }
+            );
+        }
+
+
+        return res.status(200).json({
+            success: false,
+            cart
+        });
+
+    }catch(error){
+        return res.status(400).json({
+            success: false,
+            error: error?.message || error
+        });
+    }
+}
+
 
 exports.adminCartInfo = async(req, res) => {
     try{
