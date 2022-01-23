@@ -103,7 +103,7 @@ exports.pushOrRemoveItemToCart = async(req, res) => {
                     {
                         new: true
                     }
-                );
+                ).populate("items.product");
                 return res.status(200).json({
                     success: true,
                     cart
@@ -117,7 +117,7 @@ exports.pushOrRemoveItemToCart = async(req, res) => {
                     $set: { subtotal: subtotal } 
                 }, 
                 { new: true }
-            );
+            ).populate("items.product");
         }else if(mode === "REMOVE"){
             cart = await Cart.findOneAndUpdate(
                 { _id: cart._id }, 
@@ -126,7 +126,7 @@ exports.pushOrRemoveItemToCart = async(req, res) => {
                     $inc: { subtotal: -(price * item.quantity) } 
                 }, 
                 { new: true }
-            );
+            ).populate("items.product");
         }
 
 
