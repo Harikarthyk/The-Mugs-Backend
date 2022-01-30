@@ -14,7 +14,7 @@ const {
 
 router.get("/", isSignedIn, getCartInfo);
 router.put("/", isSignedIn,  updateCart);
-router.put("/coupon", isSignedIn, applyCoupon);
+router.put("/coupon/:cartId", isSignedIn, applyCoupon);
 router.put("/items", isSignedIn, pushOrRemoveItemToCart);
 
 // admin routes 

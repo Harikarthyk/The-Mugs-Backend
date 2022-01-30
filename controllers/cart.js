@@ -4,7 +4,7 @@ const Order = require("../models/order");
 
 exports.getCartInfo = async(req, res) => {
     try{
-        let cart = await Cart.findOne({ user: req.user._id, isActive: true }).populate("items.product");
+        let cart = await Cart.findOne({ user: req.user._id, isActive: true }).populate("items.product").populate("coupon");
 
         if(cart === null){
             cart = await Cart.create({
@@ -38,7 +38,7 @@ exports.updateCart = async(req, res) => {
                 $set: req.body
             },
             { new: true }
-        );
+        ).populate("coupon");
 
         return res.status(200).json({
             success: true,
@@ -103,7 +103,7 @@ exports.pushOrRemoveItemToCart = async(req, res) => {
                     {
                         new: true
                     }
-                ).populate("items.product");
+                ).populate("items.product").populate("coupon");
                 return res.status(200).json({
                     success: true,
                     cart
@@ -117,7 +117,7 @@ exports.pushOrRemoveItemToCart = async(req, res) => {
                     $set: { subtotal: subtotal } 
                 }, 
                 { new: true }
-            ).populate("items.product");
+            ).populate("items.product").populate("coupon");
         }else if(mode === "REMOVE"){
             cart = await Cart.findOneAndUpdate(
                 { _id: cart._id }, 
@@ -126,7 +126,7 @@ exports.pushOrRemoveItemToCart = async(req, res) => {
                     $inc: { subtotal: -(price * item.quantity) } 
                 }, 
                 { new: true }
-            ).populate("items.product");
+            ).populate("items.product").populate("coupon");
         }
 
 
@@ -178,6 +178,7 @@ exports.applyCoupon = async(req, res) => {
     try{
         const { cartId } = req.params;
         const { name, total } = req.body;
+        console.log(cartId, " " , req.body)
         const coupon = await Coupon.findOne({ name });
         if(coupon === null){
             return res.status(400).json({
@@ -186,6 +187,8 @@ exports.applyCoupon = async(req, res) => {
             });
         };
         const { limit, minAmount } = coupon;
+
+        console.log(coupon, "coupm")
 
         if( total < minAmount ){
             return res.status(400).json({
@@ -201,7 +204,8 @@ exports.applyCoupon = async(req, res) => {
                 continue;
             }else if(curr === "ONE_TIME_USER"){
                 const { users } = coupon;
-                for(let user in users){
+                for(let user of users){
+                    console.log(user, "here")
                     if(user.user.toString() === req.user._id.toString()){
                         return res.status(400).json({
                             success: false,
@@ -219,26 +223,37 @@ exports.applyCoupon = async(req, res) => {
                 }
             }   
         }
-
-        await Coupon.findOneAndUpdate(
-            { _id: coupon._id },
+       
+        const newCoupon = await Coupon.findOneAndUpdate(
+            { _id: coupon._id.toString() },
             {
-                $set: updatedCoupon
+                $push: {
+                    users: {
+                        user: req.user._id.toString(),
+                        cart: cartId
+                    }
+                },
+                $inc:{
+                    count: -1
+                }
             }
         );
 
+
         await Cart.findOneAndUpdate({ _id: cartId }, {
             $set: {
-                coupon: name
+                coupon: coupon._id.toString()
             }
         });
 
         return res.status(200).json({
             success: true,
-            message: "success"
+            message: "success",
+            coupon: newCoupon
         });
         
     }catch(error){
+        console.log(error)
         return res.status(400).json({
             success: false,
             error: error || error?.message || "Something went wrong."

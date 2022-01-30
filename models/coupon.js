@@ -42,7 +42,7 @@ const couponSchema = new mongoose.Schema({
             required: [true, "Enter the Minium Amount ."]
         },
         count: {
-            type: "String",
+            type: "Number",
             required: [true, "Count is required."],
             default: 0
         },
@@ -67,9 +67,9 @@ const couponSchema = new mongoose.Schema({
                 type: Number,
                 default: 1
             },
-            order:{
+            cart:{
                 type: mongoose.Schema.Types.ObjectId, 
-                ref: "Order",
+                ref: "Cart",
             }
         }]
     },
