@@ -151,15 +151,15 @@ const OrderSchema = new mongoose.Schema(
         },
         paymentMethod: {
             type: String,
-            require: [true, "Please Choose the payment method ."],
-            enum: [
-                "COD",
-                "CREDIT CARD",
-                "DEBIT CART",
-                "UPI",
-                "NET BANKING",
-                "OTHER"
-            ]
+            // require: [true, "Please Choose the payment method ."],
+            // enum: [
+            //     "COD",
+            //     "CREDIT CARD",
+            //     "DEBIT CART",
+            //     "UPI",
+            //     "NET BANKING",
+            //     "OTHER"
+            // ]
         },
         paymentInfo:{
             type: String,
