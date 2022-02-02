@@ -31,7 +31,20 @@ exports.createTransaction = async(req, res) => {
         });
 
         await Cart.findOneAndUpdate({ _id: req.body.cartId }, { $set: {isActive: false} }) 
-
+        await Coupon.findOneAndUpdate(
+                { name: req.body.coupon },
+                {
+                    $push: {
+                        users: {
+                            user: req.user._id.toString(),
+                            cart: req.body.cartId
+                        }
+                    },
+                    $inc:{
+                        count: -1
+                    }
+                }
+            );
         return res.status(201).json({
             success: true,
             transaction
