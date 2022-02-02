@@ -1,5 +1,6 @@
 const Cart = require("../models/cart");
 const Transaction = require("../models/transaction");
+const Order = require("../models/order");
 const WhereClause = require("../utils/whereClause");
 
 exports.createTransaction = async(req, res) => {
@@ -30,21 +31,27 @@ exports.createTransaction = async(req, res) => {
             created_at: new Date()
         });
 
-        await Cart.findOneAndUpdate({ _id: req.body.cartId }, { $set: {isActive: false} }) 
-        await Coupon.findOneAndUpdate(
-                { name: req.body.coupon },
-                {
-                    $push: {
-                        users: {
-                            user: req.user._id.toString(),
-                            cart: req.body.cartId
+        await Cart.findOneAndUpdate({ _id: req.body.cartId }, { $set: {isActive: false} });
+        await Order.findOneAndUpdate({ _id: req.body.order }, { $set: {
+            isPaid: true,
+            transaction: transaction._id
+        } })
+        if(req.body.coupon){
+            await Coupon.findOneAndUpdate(
+                    { name: req.body.coupon },
+                    {
+                        $push: {
+                            users: {
+                                user: req.user._id.toString(),
+                                cart: req.body.cartId
+                            }
+                        },
+                        $inc:{
+                            count: -1
                         }
-                    },
-                    $inc:{
-                        count: -1
                     }
-                }
-            );
+                );
+        }
         return res.status(201).json({
             success: true,
             transaction
@@ -95,7 +102,7 @@ exports.getAllTransaction = async(req, res) => {
 
         transactionObj.pager(RESULT_PER_PAGE);
 
-        const transactions = await transactionObj.base.clone().populate("user", "name email");
+        const transactions = await transactionObj.base.clone().sort({ created_at: 1 }).populate("user", "name email");
 
         const totalTransactionsCount = transactions.length;
 

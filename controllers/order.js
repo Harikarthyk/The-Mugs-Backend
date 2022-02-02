@@ -87,7 +87,7 @@ exports.getAllOrders = async(req, res) => {
 
         orderObj.pager(RESULT_PER_PAGE);
 
-        const orders = await orderObj.base.clone().populate("user");
+        const orders = await orderObj.base.clone().sort({createdAt: -1}).skip(Number(req.query.skip)).populate("user");
 
         const totalOrdersCount = orders.length;
 

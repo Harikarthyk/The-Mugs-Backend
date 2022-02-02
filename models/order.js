@@ -167,6 +167,11 @@ const OrderSchema = new mongoose.Schema(
         transaction:{
             type: mongoose.SchemaTypes.ObjectId,
             ref: "Transaction",
+            default: null
+        },
+        isPaid: {
+            type: Boolean,
+            default: false
         }
     },
     { timestamps: true }
