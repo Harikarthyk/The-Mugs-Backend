@@ -1,3 +1,4 @@
+const Cart = require("../models/cart");
 const Transaction = require("../models/transaction");
 const WhereClause = require("../utils/whereClause");
 
@@ -28,6 +29,8 @@ exports.createTransaction = async(req, res) => {
             ...req.body,
             created_at: new Date()
         });
+
+        await Cart.findOneAndUpdate({ _id: req.body.cartId }, { $set: {isActive: false} }) 
 
         return res.status(201).json({
             success: true,

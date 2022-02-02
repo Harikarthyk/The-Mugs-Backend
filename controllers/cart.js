@@ -178,9 +178,13 @@ exports.applyCoupon = async(req, res) => {
     try{
         const { cartId } = req.params;
         const { name, total } = req.body;
-        console.log(cartId, " " , req.body)
         const coupon = await Coupon.findOne({ name });
         if(coupon === null){
+            await Cart.findOneAndUpdate({ _id: cartId }, {
+                $set: {
+                    coupon: null
+                }
+            });
             return res.status(400).json({
                 success: false,
                 error: "Coupon In valid."
@@ -188,9 +192,13 @@ exports.applyCoupon = async(req, res) => {
         };
         const { limit, minAmount } = coupon;
 
-        console.log(coupon, "coupm")
 
         if( total < minAmount ){
+            await Cart.findOneAndUpdate({ _id: cartId }, {
+                $set: {
+                    coupon: null
+                }
+            });
             return res.status(400).json({
                 success: false,
                 error: "Coupon In valid."
@@ -205,8 +213,12 @@ exports.applyCoupon = async(req, res) => {
             }else if(curr === "ONE_TIME_USER"){
                 const { users } = coupon;
                 for(let user of users){
-                    console.log(user, "here")
                     if(user.user.toString() === req.user._id.toString()){
+                        await Cart.findOneAndUpdate({ _id: cartId }, {
+                            $set: {
+                                coupon: null
+                            }
+                        });
                         return res.status(400).json({
                             success: false,
                             error: "Coupon Already used."
@@ -216,6 +228,11 @@ exports.applyCoupon = async(req, res) => {
             }else if(curr === "FIRST_ORDER"){
                 const orders = await Order.find({ user: req.user._id });
                 if(orders.length > 0){
+                    await Cart.findOneAndUpdate({ _id: cartId }, {
+                        $set: {
+                            coupon: null
+                        }
+                    });
                     return res.status(400).json({
                         success: false,
                         error: "Coupon Not Applicable."
@@ -224,20 +241,20 @@ exports.applyCoupon = async(req, res) => {
             }   
         }
        
-        const newCoupon = await Coupon.findOneAndUpdate(
-            { _id: coupon._id.toString() },
-            {
-                $push: {
-                    users: {
-                        user: req.user._id.toString(),
-                        cart: cartId
-                    }
-                },
-                $inc:{
-                    count: -1
-                }
-            }
-        );
+        // const newCoupon = await Coupon.findOneAndUpdate(
+        //     { _id: coupon._id.toString() },
+        //     {
+        //         $push: {
+        //             users: {
+        //                 user: req.user._id.toString(),
+        //                 cart: cartId
+        //             }
+        //         },
+        //         $inc:{
+        //             count: -1
+        //         }
+        //     }
+        // );
 
 
         await Cart.findOneAndUpdate({ _id: cartId }, {
