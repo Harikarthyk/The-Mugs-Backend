@@ -68,7 +68,7 @@ exports.getAllProduct = async (req, res) => {
 
         productsObj.pager(RESULT_PER_PAGE);
 
-        const products = await productsObj.base.clone();
+        const products = await productsObj.base.clone().populate("categories").sort({createdAt: -1});
 
         const totalProductsCount = products.length;
 

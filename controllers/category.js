@@ -33,7 +33,7 @@ exports.updateCategory = async(req, res) => {
         if(updateProductStatus === true){
             await Product.updateMany(
                 { 
-                    category: categoryId,
+                    categories: categoryId,
                     isDeleted: false
                 },
                 {
@@ -68,7 +68,7 @@ exports.getCategories = async(req, res) => {
 
         categoriesObj.pager(RESULT_PER_PAGE);
 
-        const categories = await categoriesObj.base.clone();
+        const categories = await categoriesObj.base.clone().sort({ createdAt: -1 });
 
         const totalCategoriesCount = categories.length;
 
