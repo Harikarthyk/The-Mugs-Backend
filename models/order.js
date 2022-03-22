@@ -129,8 +129,9 @@ const OrderSchema = new mongoose.Schema(
         },
         status: {
             type: String,
-            default: "PROCESSING",
+            default: "CREATED",
             enum: [
+                "CREATED",
                 "NEW",
                 "PROCESSING",
                 "HOLD",
