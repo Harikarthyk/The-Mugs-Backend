@@ -8,7 +8,7 @@ const {
 } = require("../middleware/user");
 
 // admin routes 
-router.get("/admin",isSignedIn, customRoles("admin"), dashBoardStats);     
+router.get("/admin",isSignedIn, dashBoardStats);     
 
 
 module.exports = router;
